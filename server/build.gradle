@@ -5,11 +5,33 @@ apply plugin: 'idea'
 apply plugin: 'java'
 apply plugin: 'war'
 apply plugin: 'jetty'
+apply plugin: 'docker'
 
 sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+}
+
+buildscript {
+    repositories { mavenCentral() }
+    dependencies {
+        classpath 'se.transmode.gradle:gradle-docker:1.2'
+    }
+}
+
+// Builds a deployable Docker image based on jetty. To push it to docker hub:
+//   * execute 'docker login'
+//   * execute './gradlew buildDocker -Ppush'
+task buildDocker(dependsOn: war, type: Docker) {
+    tag "bpavacic/${applicationName}"
+    maintainer 'Boris Pavacic "boris.pavacic@gmail.com"'
+    
+    baseImage 'jetty'
+    addFile(war.archivePath, '/var/lib/jetty/webapps/ROOT.war')
+    exposePort 8080
+
+    push = project.hasProperty('push')
 }
 
 dependencies {
