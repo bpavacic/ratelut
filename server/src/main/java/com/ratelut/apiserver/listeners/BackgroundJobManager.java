@@ -29,8 +29,10 @@ public class BackgroundJobManager implements ServletContextListener {
     public void contextInitialized(ServletContextEvent event) {
         System.out.println("Initializing scheduler with periodic jobs");
         scheduler = Executors.newSingleThreadScheduledExecutor();
+        // Schedule all jobs.
         for (JobDefinition job : JOBS) {
-            scheduler.scheduleAtFixedRate(job.job, 0, job.duration.getMillis(), TimeUnit.MILLISECONDS);
+            scheduler.scheduleAtFixedRate(job.job, 0, job.duration.getMillis(),
+                    TimeUnit.MILLISECONDS);
         }
     }
 
