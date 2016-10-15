@@ -1,4 +1,4 @@
-package com.ratelut.apiserver;
+package com.ratelut.apiserver.common;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,11 +23,11 @@ public enum CurrencyCode {
 
     private final boolean isBaseCurrency;
 
-    public CurrencyCode() {
+    CurrencyCode() {
         this(false);
     }
 
-    public CurrencyCode(boolean isBaseCurrency) {
+    CurrencyCode(boolean isBaseCurrency) {
         this.isBaseCurrency = isBaseCurrency;
     }
 

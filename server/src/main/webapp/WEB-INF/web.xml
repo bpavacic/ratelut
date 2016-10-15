@@ -6,24 +6,24 @@
 
     <display-name>Ratelut Server</display-name>
     <servlet>
-        <servlet-name>server</servlet-name>
+        <servlet-name>services</servlet-name>
         <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
 
         <!-- Services package configuration. -->
         <init-param>
             <param-name>com.sun.jersey.config.property.packages</param-name>
-            <param-value>com.ratelut.apiserver</param-value>
+            <param-value>com.ratelut.apiserver.services</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
-        <servlet-name>server</servlet-name>
+        <servlet-name>services</servlet-name>
         <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
     <listener>
         <!-- Register listener that will initialize background scheduler to execute cron-like tasks. -->
         <listener-class>
-            com.ratelut.apiserver.BackgroundJobManager
+            com.ratelut.apiserver.listeners.BackgroundJobManager
         </listener-class>
     </listener>
 </web-app>

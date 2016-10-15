@@ -1,4 +1,4 @@
-package com.ratelut.apiserver;
+package com.ratelut.apiserver.updater;
 
 /**
  * Checks if any of exchange rates need to be updated.

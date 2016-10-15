@@ -1,6 +1,7 @@
-package com.ratelut.apiserver;
+package com.ratelut.apiserver.services;
 
 import com.google.common.collect.ImmutableMap;
+import com.ratelut.apiserver.updater.UpdateRatesJob;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -17,7 +18,7 @@ import java.util.Map;
  * @author Boris Pavacic (boris.pavacic@gmail.com)
  */
 @Path("/")
-public class Server {
+public class ApiService {
     @GET
     @Path("sum/{num1}/{num2}")
     @Produces(MediaType.APPLICATION_JSON)

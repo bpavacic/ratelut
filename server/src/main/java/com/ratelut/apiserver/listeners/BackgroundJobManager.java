@@ -1,6 +1,7 @@
-package com.ratelut.apiserver;
+package com.ratelut.apiserver.listeners;
 
 import com.google.common.collect.ImmutableList;
+import com.ratelut.apiserver.updater.UpdateRatesJob;
 import org.joda.time.Duration;
 
 import java.util.List;
