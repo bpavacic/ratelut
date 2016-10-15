@@ -5,8 +5,6 @@ import com.ratelut.apiserver.common.ExchangeRate;
 import com.ratelut.apiserver.common.ExchangeRateProvider;
 import org.joda.time.Interval;
 
-import javax.annotation.Nullable;
-
 /**
  * Defines storage interface.
  *
@@ -14,7 +12,7 @@ import javax.annotation.Nullable;
  */
 public interface Storage {
     void saveExchangeRate(ExchangeRateProvider exchangeRateProvider, ExchangeRate exchangeRate);
-    @Nullable ExchangeRate getLatestExchangeRate(ExchangeRateProvider exchangeRateProvider,
+    ExchangeRate getLatestExchangeRate(ExchangeRateProvider exchangeRateProvider,
             CurrencyPair currencyPair);
     Iterable<ExchangeRate> getExchangeRates(ExchangeRateProvider exchangeRateProvider,
             CurrencyPair currencyPair, Interval timeInterval);

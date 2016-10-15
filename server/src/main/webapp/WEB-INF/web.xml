@@ -26,4 +26,10 @@
             com.ratelut.apiserver.listeners.BackgroundJobManager
         </listener-class>
     </listener>
+    <listener>
+        <!-- Register GuiceServletContextListener that will install required modules. -->
+        <listener-class>
+            com.ratelut.apiserver.listeners.ServletConfig
+        </listener-class>
+    </listener>
 </web-app>
