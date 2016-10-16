@@ -10,12 +10,11 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
 
 /**
  * Initializes scheduler to execute periodic jobs.
  *
- * Instead of using @{@link WebListener} annotation, the listener is manually declared in web.xml.
+ * The listener is manually declared in web.xml.
  *
  * @author Boris Pavacic (boris.pavacic@gmail.com)
  */
@@ -27,7 +26,7 @@ public class BackgroundJobManager implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent event) {
-        System.out.println("Initializing scheduler with periodic jobs");
+        System.out.println("Initializing periodic jobs scheduler.");
         scheduler = Executors.newSingleThreadScheduledExecutor();
         // Schedule all jobs.
         for (JobDefinition job : JOBS) {
@@ -38,7 +37,7 @@ public class BackgroundJobManager implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent event) {
-        System.out.println("Deinitializing scheduler");
+        System.out.println("Deinitializing periodic jobs scheduler");
         scheduler.shutdownNow();
     }
 

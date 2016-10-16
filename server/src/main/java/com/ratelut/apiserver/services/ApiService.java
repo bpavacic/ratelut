@@ -1,8 +1,11 @@
 package com.ratelut.apiserver.services;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
+import com.ratelut.apiserver.storage.Storage;
 import com.ratelut.apiserver.updater.UpdateRatesJob;
 
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -19,11 +22,13 @@ import java.util.Map;
  */
 @Path("/")
 public class ApiService {
+    @Inject private Storage storage;
+
     @GET
     @Path("sum/{num1}/{num2}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response sum(@PathParam("num1") double num1, @PathParam("num2") double num2) {
-        System.out.println("Serving HTTP request");
+        Preconditions.checkNotNull(storage);
 
         Map<String, Double> output = ImmutableMap.of(
                 "num1", num1,

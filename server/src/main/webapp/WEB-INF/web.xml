@@ -5,31 +5,24 @@
          id="WebApp_ID" version="3.1">
 
     <display-name>Ratelut Server</display-name>
-    <servlet>
-        <servlet-name>services</servlet-name>
-        <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
 
-        <!-- Services package configuration. -->
-        <init-param>
-            <param-name>com.sun.jersey.config.property.packages</param-name>
-            <param-value>com.ratelut.apiserver.services</param-value>
-        </init-param>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>services</servlet-name>
-        <url-pattern>/api/*</url-pattern>
-    </servlet-mapping>
+    <listener>
+        <listener-class>com.ratelut.apiserver.listeners.Main</listener-class>
+    </listener>
+
+    <filter>
+        <filter-name>guiceFilter</filter-name>
+        <filter-class>com.google.inject.servlet.GuiceFilter</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>guiceFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
     <listener>
         <!-- Register listener that will initialize background scheduler to execute cron-like tasks. -->
         <listener-class>
             com.ratelut.apiserver.listeners.BackgroundJobManager
-        </listener-class>
-    </listener>
-    <listener>
-        <!-- Register GuiceServletContextListener that will install required modules. -->
-        <listener-class>
-            com.ratelut.apiserver.listeners.ServletConfig
         </listener-class>
     </listener>
 </web-app>

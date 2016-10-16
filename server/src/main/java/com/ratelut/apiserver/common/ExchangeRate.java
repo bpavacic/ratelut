@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  */
 public class ExchangeRate {
     private final CurrencyPair currencyPair;
-    private final Instant when;
+    private final Instant timestamp;
     private final BigDecimal rate;
 
     public static ExchangeRate of(CurrencyPair currencyPair, Instant when, BigDecimal rate) {
@@ -19,13 +19,21 @@ public class ExchangeRate {
     }
 
     public ExchangeRate invert() {
-        return ExchangeRate.of(currencyPair.invert(), when,
+        return ExchangeRate.of(currencyPair.invert(), timestamp,
                 BigDecimal.ONE.divide(rate, BigDecimal.ROUND_HALF_UP));
     }
 
-    private ExchangeRate(CurrencyPair currencyPair, Instant when, BigDecimal rate) {
+    private ExchangeRate(CurrencyPair currencyPair, Instant timestamp, BigDecimal rate) {
         this.currencyPair = currencyPair;
-        this.when = when;
+        this.timestamp = timestamp;
         this.rate = rate;
+    }
+
+    public CurrencyPair getCurrencyPair() {
+        return currencyPair;
+    }
+
+    public Instant getTimestamp() {
+        return timestamp;
     }
 }
