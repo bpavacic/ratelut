@@ -69,7 +69,7 @@ public class SqlStorage implements Storage {
         try {
             try (PreparedStatement selectStatement = connection.prepareStatement(
                     "SELECT timestamp, provider, currency_pair, rate FROM rates WHERE "
-                            + whereClause)) {
+                            + whereClause + " ORDER BY timestamp, provider, currency_pair")) {
                 int fieldIndex = 1;
                 selectStatement.setTimestamp(fieldIndex++, Timestamp.from(timeInterval.getStart()));
                 selectStatement.setTimestamp(fieldIndex++, Timestamp.from(timeInterval.getEnd()));

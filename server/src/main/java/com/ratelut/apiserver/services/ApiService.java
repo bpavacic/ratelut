@@ -3,7 +3,6 @@ package com.ratelut.apiserver.services;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.ratelut.apiserver.storage.Storage;
-import com.ratelut.apiserver.updater.UpdateRatesJob;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -33,8 +32,7 @@ public class ApiService {
         Map<String, Double> output = ImmutableMap.of(
                 "num1", num1,
                 "num2", num2,
-                "sum", num1 + num2,
-                "counter", (double) UpdateRatesJob.counter);
+                "sum", num1 + num2);
         return Response.ok(output).build();
     }
 }

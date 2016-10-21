@@ -1,5 +1,8 @@
 package com.ratelut.apiserver.common;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,8 +39,11 @@ public enum CurrencyCode {
     }
 
     public static List<CurrencyCode> getAllBaseCurrencies() {
-        List<CurrencyCode> currencies = Arrays.asList(CurrencyCode.values());
-        currencies.removeIf(currencyCode -> !currencyCode.isBaseCurrency());
-        return currencies;
+        return Lists.newArrayList(Iterables.filter(getAllBaseCurrencies(),
+                input -> input.isBaseCurrency()));
+    }
+
+    public static List<CurrencyCode> getAllCurrencies() {
+        return Arrays.asList(CurrencyCode.values());
     }
 }

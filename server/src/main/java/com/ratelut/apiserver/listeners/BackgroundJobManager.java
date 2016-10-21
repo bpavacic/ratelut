@@ -1,15 +1,18 @@
 package com.ratelut.apiserver.listeners;
 
-import com.google.common.collect.ImmutableList;
+import com.google.common.base.Preconditions;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.ratelut.apiserver.storage.Storage;
+import com.ratelut.apiserver.storage.StorageModule;
 import com.ratelut.apiserver.updater.UpdateRatesJob;
 
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 import java.time.Duration;
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
 
 /**
  * Initializes scheduler to execute periodic jobs.
@@ -19,35 +22,26 @@ import javax.servlet.ServletContextListener;
  * @author Boris Pavacic (boris.pavacic@gmail.com)
  */
 public class BackgroundJobManager implements ServletContextListener {
-    private static List<JobDefinition> JOBS = ImmutableList.of(
-            new JobDefinition(Duration.ofMinutes(1), new UpdateRatesJob()));
-
+    private Storage storage;
     private ScheduledExecutorService scheduler;
+
+    public BackgroundJobManager() {
+        // TODO(bobo): Check if there is a way to initialize the module elsewhere.
+        Injector injector = Guice.createInjector(new StorageModule());
+        this.storage = Preconditions.checkNotNull(injector.getInstance(Storage.class));
+    }
 
     @Override
     public void contextInitialized(ServletContextEvent event) {
         System.out.println("Initializing periodic jobs scheduler.");
         scheduler = Executors.newSingleThreadScheduledExecutor();
-        // Schedule all jobs.
-        for (JobDefinition job : JOBS) {
-            scheduler.scheduleAtFixedRate(job.job, 0, job.duration.toMillis(),
-                    TimeUnit.MILLISECONDS);
-        }
+        // Schedule jobs.
+        scheduler.scheduleAtFixedRate(new UpdateRatesJob(storage), 0,
+                Duration.ofMinutes(1).toMillis(), TimeUnit.MILLISECONDS);
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent event) {
-        System.out.println("Deinitializing periodic jobs scheduler");
         scheduler.shutdownNow();
-    }
-
-    private static class JobDefinition {
-        final Duration duration;
-        final Runnable job;
-
-        public JobDefinition(Duration duration, Runnable job) {
-            this.duration = duration;
-            this.job = job;
-        }
     }
 }
