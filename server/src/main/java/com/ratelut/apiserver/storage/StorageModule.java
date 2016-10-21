@@ -10,7 +10,6 @@ import com.google.inject.AbstractModule;
 public class StorageModule extends AbstractModule {
     @Override
     public void configure() {
-        System.out.println("Configuring Storage");
         bind(Storage.class).toInstance(new InMemoryStorage());
     }
 }
