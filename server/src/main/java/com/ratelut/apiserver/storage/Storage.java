@@ -5,7 +5,7 @@ import com.ratelut.apiserver.common.ExchangeRate;
 import com.ratelut.apiserver.common.ExchangeRateProvider;
 import org.joda.time.Interval;
 
-import javax.annotation.Nullable;
+import java.util.Optional;
 
 /**
  * Defines storage interface.
@@ -13,23 +13,23 @@ import javax.annotation.Nullable;
  * @author Boris Pavacic (boris.pavacic@gmail.com)
  */
 public interface Storage {
-    /** Stores new exchange rate into the storage. */
-    void saveExchangeRate(ExchangeRateProvider exchangeRateProvider, ExchangeRate exchangeRate);
     /**
-     * Gets the latest exchange rate for given currency pair and exchange rate provider.
-     *
-     * @return null if there is no data yet.
+     * Stores new exchange rate into the storage.
      */
-    @Nullable
-    ExchangeRate getLatestExchangeRate(ExchangeRateProvider exchangeRateProvider,
-                                       CurrencyPair currencyPair);
+    void saveExchangeRate(ExchangeRate exchangeRate);
 
     /**
-     * Gets all exchange rates for certain currency pair, interval, and exchange rate provider.
+     * Gets all exchange rates for the specified time interval, currency pair, and exchange rate
+     * provider.
      *
-     * @return all currency rates for the interval, sorted by timestamp (ascending). If no exchange
-     *         rates are found, returns an empty list.
+     * @param timeInterval time interval
+     * @param exchangeRateProvider if set, return results only for this exchange rate provider
+     * @param currencyPair if set, return only results for this currency pair
+     *
+     * @return all currency rates found, sorted by timestamp (ascending). If no exchange
+     *         rates are found, returns an empty iterator.
      */
-    Iterable<ExchangeRate> getExchangeRates(ExchangeRateProvider exchangeRateProvider,
-            CurrencyPair currencyPair, Interval timeInterval);
+    Iterable<ExchangeRate> getExchangeRates(Interval timeInterval,
+                                            Optional<ExchangeRateProvider> exchangeRateProvider,
+                                            Optional<CurrencyPair> currencyPair);
 }

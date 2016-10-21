@@ -6,5 +6,5 @@ package com.ratelut.apiserver.common;
  * @author Boris Pavacic (boris.pavacic@gmail.com)
  */
 public enum ExchangeRateProvider {
-    REVOLUT
+    REVOLUT, BLOOMBERG
 }

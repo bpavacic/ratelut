@@ -1,72 +1,78 @@
 package com.ratelut.apiserver.storage;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
 import com.ratelut.apiserver.common.CurrencyPair;
 import com.ratelut.apiserver.common.ExchangeRate;
 import com.ratelut.apiserver.common.ExchangeRateProvider;
+import org.joda.time.Instant;
 import org.joda.time.Interval;
 
-import javax.annotation.Nullable;
 import javax.inject.Singleton;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * Storage implementation keeping all data in memory in memory.
  *
- * Once the server is shut down, all data is lost. Good for testing purposes.
+ * Once the server is shut down, all data is lost. Implemented for testing purposes.
  *
  * @author Boris Pavacic (boris.pavacic@gmail.com)
  */
 @Singleton
 public class InMemoryStorage implements Storage {
-    // provider -> currency pair -> exchange rates
-    private final Map<ExchangeRateProvider, Map<CurrencyPair, SortedSet<ExchangeRate>>> map =
-            new HashMap<>();
+    private static final Comparator<ExchangeRateProvider> PROVIDER_BY_NAME =
+            (o1, o2) -> o1.name().compareTo(o2.name());
+    private static final Comparator<ExchangeRate> EXCHANGE_RATE_BY_CURRENCY_PAIR =
+            (o1, o2) -> o1.getCurrencyPair().toString().compareTo(o2.getCurrencyPair().toString());
+
+    // timestamp -> provider -> currency pair -> exchange rate
+    private final SortedMap<Instant, SortedMap<ExchangeRateProvider, SortedSet<ExchangeRate>>>
+            ratesMap = new TreeMap<>();
 
     @Override
-    public synchronized void saveExchangeRate(ExchangeRateProvider exchangeRateProvider,
-            ExchangeRate exchangeRate) {
-        getOrCreateSetFor(exchangeRateProvider, exchangeRate.getCurrencyPair())
-                .add(exchangeRate);
-    }
-
-    @Nullable
-    @Override
-    public synchronized ExchangeRate getLatestExchangeRate(
-            ExchangeRateProvider exchangeRateProvider, CurrencyPair currencyPair) {
-        SortedSet<ExchangeRate> set = getOrCreateSetFor(exchangeRateProvider, currencyPair);
-        if (set.isEmpty()) {
-            return null;
-        } else {
-            return set.last();
+    public synchronized void saveExchangeRate(ExchangeRate exchangeRate) {
+        if (!ratesMap.containsKey(exchangeRate.getTimestamp())) {
+            ratesMap.put(exchangeRate.getTimestamp(), new TreeMap<>(PROVIDER_BY_NAME));
         }
+        SortedMap<ExchangeRateProvider, SortedSet<ExchangeRate>> timeEntry =
+                ratesMap.get(exchangeRate.getTimestamp());
+
+        if (!timeEntry.containsKey(exchangeRate.getProvider())) {
+            timeEntry.put(exchangeRate.getProvider(), new TreeSet<>(EXCHANGE_RATE_BY_CURRENCY_PAIR));
+        }
+        SortedSet<ExchangeRate> providerSet = timeEntry.get(exchangeRate.getProvider());
+
+        providerSet.add(exchangeRate);
     }
 
     @Override
     public synchronized Iterable<ExchangeRate> getExchangeRates(
-            ExchangeRateProvider exchangeRateProvider,
-            CurrencyPair currencyPair, Interval timeInterval) {
-        return Iterables.filter(getOrCreateSetFor(exchangeRateProvider, currencyPair),
-                input -> {
-                    return timeInterval.contains(input.getTimestamp());
-                });
-    }
+            Interval timeInterval,
+            Optional<ExchangeRateProvider> exchangeRateProvider,
+            Optional<CurrencyPair> currencyPair) {
+        List<ExchangeRate> allRates = new ArrayList<>();
+        for (Map.Entry<Instant, SortedMap<ExchangeRateProvider, SortedSet<ExchangeRate>>> entry
+                : ratesMap.entrySet()) {
+            // Filter by timestamp.
+            if (timeInterval.contains(entry.getKey())) {
+                for (SortedSet<ExchangeRate> entry2 : entry.getValue().values()) {
+                    allRates.addAll(entry2);
+                }
+            }
+        }
+        Iterable<ExchangeRate> result = allRates;
 
-    private SortedSet<ExchangeRate> getOrCreateSetFor(ExchangeRateProvider exchangeRateProvider,
-            CurrencyPair currencyPair) {
-        if (!map.containsKey(exchangeRateProvider)) {
-            map.put(exchangeRateProvider, new HashMap<>());
+        // Filter by provider, if set.
+        if (exchangeRateProvider.isPresent()) {
+            result = Iterables.filter(result,
+                    input -> input.getProvider().equals(exchangeRateProvider.get()));
         }
-        final Map<CurrencyPair, SortedSet<ExchangeRate>> exchangeRateProviderMap =
-                Preconditions.checkNotNull(map.get(exchangeRateProvider));
-        if (!exchangeRateProviderMap.containsKey(currencyPair)) {
-            exchangeRateProviderMap.put(currencyPair, new TreeSet<>(
-                    (o1, o2) -> o1.getTimestamp().compareTo(o2.getTimestamp())));
+
+        // Filter by currency pair, if set.
+        if (currencyPair.isPresent()) {
+            result = Iterables.filter(result,
+                    input -> input.getCurrencyPair().equals(currencyPair.get()));
         }
-        return Preconditions.checkNotNull(exchangeRateProviderMap.get(currencyPair));
+
+        return result;
     }
 }
