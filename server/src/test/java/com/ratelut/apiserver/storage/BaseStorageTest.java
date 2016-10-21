@@ -52,14 +52,14 @@ abstract class BaseStorageTest {
     private Storage storage;
 
     @Before
-    public void setUpStorage() {
+    public void setUpStorage() throws Exception {
         storage = createStorageForTest();
     }
 
-    protected abstract Storage createStorageForTest();
+    protected abstract Storage createStorageForTest() throws Exception;
 
     @Test
-    public void simpleStoreAndGet() {
+    public void simpleStoreAndGet() throws StorageException {
         saveExchangeRates(P1_EURUSD_TUE);
         assertStorageReturns(
                 new Interval(MONDAY, FRIDAY), ALL_PROVIDERS, ALL_CURRENCY_PAIRS,
@@ -72,7 +72,7 @@ abstract class BaseStorageTest {
     }
 
     @Test
-    public void testFilters() {
+    public void testFilters() throws StorageException {
         saveExchangeRates(P1_EURUSD_TUE, P1_EURUSD_THU, P1_EURGBP_TUE, P1_EURGBP_THU, P2_EURGBP_TUE,
                 P2_EURUSD_TUE);
         // Filter on time.
@@ -89,7 +89,7 @@ abstract class BaseStorageTest {
                 P1_EURGBP_THU);
     }
 
-    private void saveExchangeRates(ExchangeRate ... rates) {
+    private void saveExchangeRates(ExchangeRate ... rates) throws StorageException {
         for (ExchangeRate rate : rates) {
             storage.saveExchangeRate(rate);
         }
@@ -98,7 +98,7 @@ abstract class BaseStorageTest {
     private void assertStorageReturns(Interval interval,
                                       Optional<ExchangeRateProvider> providers,
                                       Optional<CurrencyPair> currencyPairs,
-                                      ExchangeRate ... expected) {
+                                      ExchangeRate ... expected) throws StorageException {
         List<ExchangeRate> returnedAsList = Lists.newArrayList(
                 storage.getExchangeRates(interval, providers, currencyPairs));
         List<ExchangeRate> expectedAsList = Arrays.asList(expected);

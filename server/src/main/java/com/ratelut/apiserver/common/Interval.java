@@ -20,4 +20,12 @@ public class Interval {
     public boolean contains(Instant instant) {
         return range.contains(instant);
     }
+
+    public Instant getStart() {
+        return range.lowerEndpoint();
+    }
+
+    public Instant getEnd() {
+        return range.upperEndpoint();
+    }
 }

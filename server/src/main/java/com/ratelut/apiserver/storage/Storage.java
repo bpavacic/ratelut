@@ -16,7 +16,7 @@ public interface Storage {
     /**
      * Stores new exchange rate into the storage.
      */
-    void saveExchangeRate(ExchangeRate exchangeRate);
+    void saveExchangeRate(ExchangeRate exchangeRate) throws StorageException;
 
     /**
      * Gets all exchange rates for the specified time interval, currency pair, and exchange rate
@@ -31,5 +31,6 @@ public interface Storage {
      */
     Iterable<ExchangeRate> getExchangeRates(Interval timeInterval,
                                             Optional<ExchangeRateProvider> exchangeRateProvider,
-                                            Optional<CurrencyPair> currencyPair);
+                                            Optional<CurrencyPair> currencyPair)
+            throws StorageException;
 }

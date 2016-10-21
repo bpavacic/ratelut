@@ -1,5 +1,7 @@
 package com.ratelut.apiserver.common;
 
+import com.google.common.base.Preconditions;
+
 import java.util.Objects;
 
 /**
@@ -13,6 +15,12 @@ public class CurrencyPair {
 
     public static CurrencyPair of(CurrencyCode first, CurrencyCode second) {
         return new CurrencyPair(first, second);
+    }
+
+    public static CurrencyPair from(String string) {
+        Preconditions.checkArgument(string.length() == 6);
+        return of(CurrencyCode.valueOf(string.substring(0, 3)),
+                CurrencyCode.valueOf(string.substring(3)));
     }
 
     public CurrencyCode getFirst() {
