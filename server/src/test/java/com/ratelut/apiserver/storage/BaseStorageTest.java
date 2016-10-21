@@ -1,17 +1,13 @@
 package com.ratelut.apiserver.storage;
 
 import com.google.common.collect.Lists;
-import com.ratelut.apiserver.common.CurrencyCode;
-import com.ratelut.apiserver.common.CurrencyPair;
-import com.ratelut.apiserver.common.ExchangeRate;
-import com.ratelut.apiserver.common.ExchangeRateProvider;
-import org.joda.time.Duration;
-import org.joda.time.Instant;
-import org.joda.time.Interval;
+import com.ratelut.apiserver.common.*;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -25,10 +21,10 @@ import static org.junit.Assert.assertTrue;
  */
 abstract class BaseStorageTest {
     private static final Instant MONDAY = Instant.parse("2016-10-17T15:00:00Z");
-    private static final Instant TUESDAY = MONDAY.plus(Duration.standardDays(1));
-    private static final Instant WEDNESDAY = TUESDAY.plus(Duration.standardDays(1));
-    private static final Instant THURSDAY = WEDNESDAY.plus(Duration.standardDays(1));
-    private static final Instant FRIDAY = THURSDAY.plus(Duration.standardDays(1));
+    private static final Instant TUESDAY = MONDAY.plus(Duration.ofDays(1));
+    private static final Instant WEDNESDAY = TUESDAY.plus(Duration.ofDays(1));
+    private static final Instant THURSDAY = WEDNESDAY.plus(Duration.ofDays(1));
+    private static final Instant FRIDAY = THURSDAY.plus(Duration.ofDays(1));
 
     private static final Optional<ExchangeRateProvider> ALL_PROVIDERS = Optional.empty();
     private static final Optional<CurrencyPair> ALL_CURRENCY_PAIRS = Optional.empty();

@@ -1,8 +1,7 @@
 package com.ratelut.apiserver.common;
 
-import org.joda.time.Instant;
-
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.Objects;
 
 /**

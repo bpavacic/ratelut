@@ -4,10 +4,10 @@ import com.google.common.collect.Iterables;
 import com.ratelut.apiserver.common.CurrencyPair;
 import com.ratelut.apiserver.common.ExchangeRate;
 import com.ratelut.apiserver.common.ExchangeRateProvider;
-import org.joda.time.Instant;
-import org.joda.time.Interval;
+import com.ratelut.apiserver.common.Interval;
 
 import javax.inject.Singleton;
+import java.time.Instant;
 import java.util.*;
 
 /**

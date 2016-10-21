@@ -2,8 +2,8 @@ package com.ratelut.apiserver.listeners;
 
 import com.google.common.collect.ImmutableList;
 import com.ratelut.apiserver.updater.UpdateRatesJob;
-import org.joda.time.Duration;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -20,7 +20,7 @@ import javax.servlet.ServletContextListener;
  */
 public class BackgroundJobManager implements ServletContextListener {
     private static List<JobDefinition> JOBS = ImmutableList.of(
-            new JobDefinition(Duration.standardMinutes(1), new UpdateRatesJob()));
+            new JobDefinition(Duration.ofMinutes(1), new UpdateRatesJob()));
 
     private ScheduledExecutorService scheduler;
 
@@ -30,7 +30,7 @@ public class BackgroundJobManager implements ServletContextListener {
         scheduler = Executors.newSingleThreadScheduledExecutor();
         // Schedule all jobs.
         for (JobDefinition job : JOBS) {
-            scheduler.scheduleAtFixedRate(job.job, 0, job.duration.getMillis(),
+            scheduler.scheduleAtFixedRate(job.job, 0, job.duration.toMillis(),
                     TimeUnit.MILLISECONDS);
         }
     }

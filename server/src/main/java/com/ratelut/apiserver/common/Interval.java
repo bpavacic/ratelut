@@ -1,0 +1,23 @@
+package com.ratelut.apiserver.common;
+
+import com.google.common.collect.Range;
+import com.google.common.collect.Ranges;
+
+import java.time.Instant;
+
+/**
+ * Basic replacement for Joda Interval class.
+ *
+ * @author Boris Pavacic (boris.pavacic@gmail.com)
+ */
+public class Interval {
+    private final Range<Instant> range;
+
+    public Interval(Instant start, Instant end) {
+        range = Ranges.closedOpen(start, end);
+    }
+
+    public boolean contains(Instant instant) {
+        return range.contains(instant);
+    }
+}

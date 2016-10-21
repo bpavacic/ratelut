@@ -3,7 +3,7 @@ package com.ratelut.apiserver.storage;
 import com.ratelut.apiserver.common.CurrencyPair;
 import com.ratelut.apiserver.common.ExchangeRate;
 import com.ratelut.apiserver.common.ExchangeRateProvider;
-import org.joda.time.Interval;
+import com.ratelut.apiserver.common.Interval;
 
 import java.util.Optional;
 
