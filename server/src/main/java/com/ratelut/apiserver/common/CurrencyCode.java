@@ -39,7 +39,7 @@ public enum CurrencyCode {
     }
 
     public static List<CurrencyCode> getAllBaseCurrencies() {
-        return Lists.newArrayList(Iterables.filter(getAllBaseCurrencies(),
+        return Lists.newArrayList(Iterables.filter(getAllCurrencies(),
                 input -> input.isBaseCurrency()));
     }
 
