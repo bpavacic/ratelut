@@ -14,7 +14,7 @@ import java.time.Duration;
  * @author Boris Pavacic (boris.pavacic@gmail.com)
  */
 public class Utils {
-    private static final Duration TIMEOUT = Duration.ofMinutes(1);
+    private static final Duration TIMEOUT = Duration.ofSeconds(30);
 
     /**
      * Fetches resource from Internet.
