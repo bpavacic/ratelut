@@ -1,7 +1,6 @@
 package com.ratelut.apiserver.updater;
 
 import com.google.common.base.Preconditions;
-import com.google.common.base.Throwables;
 import com.google.common.collect.Iterables;
 import com.ratelut.apiserver.common.*;
 import com.ratelut.apiserver.storage.Storage;
@@ -32,6 +31,8 @@ public class UpdateRatesJob implements Runnable {
 
     @Override
     public void run() {
+        // TODO(bobo): Remove
+        System.out.println("Updating exchange rates");
         List<CurrencyPair> allPairs = RevolutUtils.getAllCurrencyPairs();
         for (CurrencyPair pair : allPairs) {
             updateRevolutRateIfNecessary(pair);
@@ -49,11 +50,15 @@ public class UpdateRatesJob implements Runnable {
                 Optional<ExchangeRate> newRate = RevolutUtils.fetchExchangeRate(pair);
                 if (newRate.isPresent()) {
                     storage.saveExchangeRate(newRate.get());
+                } else {
+                    // TODO(bobo): Remove
+                    System.out.println("Couldn't fetch exchange rate for " + pair);
                 }
             }
         } catch (Throwable e) {
             // Swallow errors.
-            System.out.println("Unable to update Revolut exchange rate for " + pair);
+            System.out.println(String.format("Unable to update Revolut exchange rate for %s: %s",
+                    pair, e.getMessage()));
         }
     }
 

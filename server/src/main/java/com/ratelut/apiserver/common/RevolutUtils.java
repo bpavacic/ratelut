@@ -41,8 +41,8 @@ public class RevolutUtils {
 
     public static Optional<ExchangeRate> fetchExchangeRate(CurrencyPair pair) {
         try {
-            String contents = Utils.loadUrl(
-                    String.format(REVOLUT_QUOTE_URL_FORMAT, pair.getFirst(), pair.getSecond()));
+            String url = String.format(REVOLUT_QUOTE_URL_FORMAT, pair.getFirst(), pair.getSecond());
+            String contents = Utils.loadUrl(url);
             ExchangeRate rate = RevolutJsonParser.parseExchangeRate(contents);
             return Optional.of(rate);
         } catch (IOException | InternalException e) {
