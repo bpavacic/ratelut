@@ -31,33 +31,36 @@ public class UpdateRatesJob implements Runnable {
 
     @Override
     public void run() {
-        // TODO(bobo): Remove
-        System.out.println("Updating exchange rates");
-        List<CurrencyPair> allPairs = RevolutUtils.getAllCurrencyPairs();
+        List<CurrencyPair> allPairs = RevolutUtils.getAllRevolutCurrencyPairs();
         for (CurrencyPair pair : allPairs) {
-            updateRevolutRateIfNecessary(pair);
-            updateRevolutRateIfNecessary(pair.invert());
+            updateExchangeRatesIfNecessary(pair);
         }
     }
 
-    private void updateRevolutRateIfNecessary(CurrencyPair pair) {
+    private void updateExchangeRatesIfNecessary(CurrencyPair pair) {
         try {
             // Get lastest exchange rate we have stored.
             ExchangeRate oldRate = getLatestStoredRevolutExchangeRate(pair);
             if (oldRate == null || Duration.between(oldRate.getTimestamp(), Instant.now())
                     .compareTo(REVOLUT_RATE_TTL) > 0) {
                 // Needs an update.
-                Optional<ExchangeRate> newRate = RevolutUtils.fetchExchangeRate(pair);
+                Optional<ExchangeRate> newRate = RevolutRateFetcher.fetchExchangeRate(pair);
                 if (newRate.isPresent()) {
                     storage.saveExchangeRate(newRate.get());
-                } else {
-                    // TODO(bobo): Remove
-                    System.out.println("Couldn't fetch exchange rate for " + pair);
+                }
+                Optional<ExchangeRate> inverseRate = RevolutRateFetcher.fetchExchangeRate(
+                        pair.invert());
+                if (inverseRate.isPresent()) {
+                    storage.saveExchangeRate(inverseRate.get());
+                }
+                Optional<ExchangeRate> bloombergRage = BloombergRateFetcher.fetchExchangeRate(pair);
+                if (bloombergRage.isPresent()) {
+                    storage.saveExchangeRate(bloombergRage.get());
                 }
             }
         } catch (Throwable e) {
             // Swallow errors.
-            System.out.println(String.format("Unable to update Revolut exchange rate for %s: %s",
+            System.out.println(String.format("Unable to update exchange rates for %s: %s",
                     pair, e.getMessage()));
         }
     }

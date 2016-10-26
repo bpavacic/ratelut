@@ -13,9 +13,7 @@ import java.util.Optional;
  */
 public class RevolutUtils {
     private static final ImmutableList<CurrencyPair> ALL_REVOLUT_CURRENCY_PAIRS =
-            populateCurrencyPairs();
-    private static final String REVOLUT_QUOTE_URL_FORMAT =
-            "https://revolut.com/api/quote/internal/%s%s";
+            populateRevolutCurrencyPairs();
     /**
      * Returns a list of all currency pairs we should monitor.
      *
@@ -23,11 +21,11 @@ public class RevolutUtils {
      * spending currency
      *
      */
-    public static List<CurrencyPair> getAllCurrencyPairs() {
+    public static List<CurrencyPair> getAllRevolutCurrencyPairs() {
         return ALL_REVOLUT_CURRENCY_PAIRS;
     }
 
-    private static ImmutableList<CurrencyPair> populateCurrencyPairs() {
+    private static ImmutableList<CurrencyPair> populateRevolutCurrencyPairs() {
         ImmutableList.Builder<CurrencyPair> builder = ImmutableList.builder();
         for (CurrencyCode currency1: CurrencyCode.getAllBaseCurrencies()) {
             for (CurrencyCode currency2 : CurrencyCode.getAllCurrencies()) {
@@ -37,17 +35,5 @@ public class RevolutUtils {
             }
         }
         return builder.build();
-    }
-
-    public static Optional<ExchangeRate> fetchExchangeRate(CurrencyPair pair) {
-        try {
-            String url = String.format(REVOLUT_QUOTE_URL_FORMAT, pair.getFirst(), pair.getSecond());
-            String contents = Utils.loadUrl(url);
-            ExchangeRate rate = RevolutJsonParser.parseExchangeRate(contents);
-            return Optional.of(rate);
-        } catch (IOException | InternalException e) {
-            System.out.println("Error fetching Revolut rate for " + pair);
-            return Optional.empty();
-        }
     }
 }

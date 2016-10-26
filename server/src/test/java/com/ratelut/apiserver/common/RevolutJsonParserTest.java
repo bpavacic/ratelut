@@ -9,14 +9,14 @@ import java.time.Instant;
 import static org.junit.Assert.*;
 
 /**
- * Unit test for {@link RevolutJsonParser}.
+ * Unit test for {@link RevolutRateFetcher}.
  *
  * @author Boris Pavacic (boris.pavacic@gmail.com)
  */
 public class RevolutJsonParserTest {
     @Test
     public void parseInput() throws IOException {
-        ExchangeRate parsed = RevolutJsonParser.parseExchangeRate(
+        ExchangeRate parsed = RevolutRateFetcher.parseExchangeRate(
                 "{\"from\":\"EUR\",\"to\":\"LKR\",\"rate\":156.7522,\"timestamp\":1477054543000}");
         assertEquals(
                 ExchangeRate.of(ExchangeRateProvider.REVOLUT,
@@ -29,7 +29,7 @@ public class RevolutJsonParserTest {
     @Test
     public void invalidInput() {
         try {
-            RevolutJsonParser.parseExchangeRate(
+            RevolutRateFetcher.parseExchangeRate(
                     "{\"from\":\"EUR\",\"to\":\"LKR\",\"timestamp\":1477054543000}");
             throw new IllegalStateException("Should have thrown");
         } catch (Throwable expected) {

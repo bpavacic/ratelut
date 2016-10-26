@@ -8,22 +8,39 @@ import com.google.common.base.Preconditions;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Optional;
 
 /**
- * Helper class to parse Revolut repsonses into {@link ExchangeRate} objects.
+ * Helper class to fetch exchange rates from Revolut servers and parse them into
+ * {@link ExchangeRate} objects.
  *
  * @author Boris Pavacic (boris.pavacic@gmail.com)
  */
-public class RevolutJsonParser {
+public class RevolutRateFetcher {
+    private static final String REVOLUT_QUOTE_URL_FORMAT =
+            "https://revolut.com/api/quote/internal/%s%s";
+
     private static final ObjectMapper OBJECT_MAPPER;
     private static final JsonFactory JSON_FACTORY;
-
+    
     static {
         OBJECT_MAPPER = new ObjectMapper();
         JSON_FACTORY = new JsonFactory(OBJECT_MAPPER);
     }
 
-    public static ExchangeRate parseExchangeRate(String contents) throws IOException {
+    public static Optional<ExchangeRate> fetchExchangeRate(CurrencyPair pair) {
+        try {
+            String url = String.format(REVOLUT_QUOTE_URL_FORMAT, pair.getFirst(), pair.getSecond());
+            String contents = Utils.loadUrl(url);
+            ExchangeRate rate = RevolutRateFetcher.parseExchangeRate(contents);
+            return Optional.of(rate);
+        } catch (IOException | InternalException e) {
+            System.out.println("Error fetching Revolut rate for " + pair + ", " + e.getMessage());
+            return Optional.empty();
+        }
+    }
+
+    static ExchangeRate parseExchangeRate(String contents) throws IOException {
         RevolutResponseObject read = JSON_FACTORY.createParser(contents)
                 .readValueAs(RevolutResponseObject.class);
         return read.toExchangeRate();
