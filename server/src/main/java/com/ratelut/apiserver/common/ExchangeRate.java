@@ -1,5 +1,6 @@
 package com.ratelut.apiserver.common;
 
+import javax.annotation.Nonnull;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Objects;
@@ -10,10 +11,10 @@ import java.util.Objects;
  * @author Boris Pavacic (boris.pavacic@gmail.com)
  */
 public class ExchangeRate {
-    private final ExchangeRateProvider provider;
-    private final CurrencyPair currencyPair;
-    private final Instant timestamp;
-    private final BigDecimal rate;
+    private final @Nonnull ExchangeRateProvider provider;
+    private final @Nonnull CurrencyPair currencyPair;
+    private final @Nonnull Instant timestamp;
+    private final @Nonnull BigDecimal rate;
 
     public static ExchangeRate of(ExchangeRateProvider provider, CurrencyPair currencyPair,
             Instant when, BigDecimal rate) {
@@ -22,15 +23,15 @@ public class ExchangeRate {
 
     public ExchangeRate invert() {
         return ExchangeRate.of(provider, currencyPair.invert(), timestamp,
-                BigDecimal.ONE.divide(rate, BigDecimal.ROUND_HALF_UP));
+                BigDecimal.ONE.divide(rate, rate.scale(), BigDecimal.ROUND_HALF_UP));
     }
 
     private ExchangeRate(ExchangeRateProvider provider, CurrencyPair currencyPair,
             Instant timestamp, BigDecimal rate) {
-        this.provider = provider;
-        this.currencyPair = currencyPair;
-        this.timestamp = timestamp;
-        this.rate = rate;
+        this.provider = Objects.requireNonNull(provider);
+        this.currencyPair = Objects.requireNonNull(currencyPair);
+        this.timestamp = Objects.requireNonNull(timestamp);
+        this.rate = Objects.requireNonNull(rate);
     }
 
     public ExchangeRateProvider getProvider() {
