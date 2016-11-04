@@ -1,5 +1,5 @@
 group 'ratelut'
-version '1.06-SNAPSHOT'
+version '1.08-SNAPSHOT'
 
 apply plugin: 'idea'
 apply plugin: 'java'
@@ -40,7 +40,7 @@ dependencies {
     compile 'com.google.code.findbugs:jsr305:3.0.0'
     compile 'com.google.guava:guava:19.0'
     compile 'com.sun.jersey.contribs:jersey-guice:1.19.2'
-    compile 'com.sun.jersey:jersey-server:1.19.2'
+    compile 'org.glassfish.jersey.containers:jersey-container-servlet:2.22'
     compile 'javax.servlet:servlet-api:2.5'
     compile 'org.glassfish.jersey.media:jersey-media-json-jackson:2.22'
     compile 'org.xerial:sqlite-jdbc:3.8.11'
