@@ -1,7 +1,6 @@
 package com.ratelut.apiserver.common;
 
 import com.google.common.collect.Range;
-import com.google.common.collect.Ranges;
 
 import java.time.Instant;
 
@@ -14,7 +13,7 @@ public class Interval {
     private final Range<Instant> range;
 
     public Interval(Instant start, Instant end) {
-        range = Ranges.closedOpen(start, end);
+        range = Range.closedOpen(start, end);
     }
 
     public boolean contains(Instant instant) {
