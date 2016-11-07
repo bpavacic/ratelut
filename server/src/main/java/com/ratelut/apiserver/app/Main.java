@@ -21,13 +21,29 @@ public class Main {
     private static final int DEFAULT_PORT = 8080;
     @Inject private BackgroundJobManager backgroundJobManager;
 
+    private static String getJarPath() {
+        java.net.URL codeBase = Main.class.getProtectionDomain().getCodeSource().getLocation();
+        if (codeBase.getPath().endsWith(".jar")) {
+            return String.format("jar:file://%s", codeBase.getPath());
+        } else {
+            return null;
+        }
+    }
+
     public void startServer(int serverPort) throws Exception {
         System.out.println("Starting Jetty server");
 
         Server server = new Server(serverPort);
 
         ServletContextHandler root = new ServletContextHandler(server, "/");
-        root.setResourceBase("./src/main/resources/html/");
+        String jarPath = getJarPath();
+        if (jarPath != null) {
+            // Running from JAR.
+            root.setResourceBase(jarPath + "!/html/");
+        } else {
+            // Running from IDE.
+            root.setResourceBase("./src/main/resources/html/");
+        }
         root.addFilter(GuiceFilter.class, "/api/*", null);
         root.addServlet(DefaultServlet.class, "/");
         root.addEventListener(backgroundJobManager);
