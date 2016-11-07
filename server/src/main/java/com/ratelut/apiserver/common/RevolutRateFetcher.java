@@ -1,9 +1,9 @@
 package com.ratelut.apiserver.common;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Preconditions;
+import org.codehaus.jackson.JsonFactory;
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -41,7 +41,7 @@ public class RevolutRateFetcher {
     }
 
     static ExchangeRate parseExchangeRate(String contents) throws IOException {
-        RevolutResponseObject read = JSON_FACTORY.createParser(contents)
+        RevolutResponseObject read = JSON_FACTORY.createJsonParser(contents)
                 .readValueAs(RevolutResponseObject.class);
         return read.toExchangeRate();
     }

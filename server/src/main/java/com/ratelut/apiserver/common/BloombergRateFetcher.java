@@ -1,12 +1,14 @@
 package com.ratelut.apiserver.common;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
+
+import org.codehaus.jackson.JsonFactory;
+import org.codehaus.jackson.JsonParser;
+import org.codehaus.jackson.Version;
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.DeserializationContext;
+import org.codehaus.jackson.map.JsonDeserializer;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.module.SimpleModule;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -66,7 +68,8 @@ public class BloombergRateFetcher {
         private static final ZoneId BLOOMBERG_ZONE_ID = ZoneId.of("America/New_York");
 
         static {
-            final SimpleModule module = new SimpleModule();
+            final SimpleModule module = new SimpleModule("BloombergJsonObjectModule",
+                    Version.unknownVersion());
             module.addDeserializer(Pair.class, new PairDeserializer());
             OBJECT_MAPPER = new ObjectMapper();
             OBJECT_MAPPER.registerModule(module);
@@ -93,7 +96,7 @@ public class BloombergRateFetcher {
 
         public static List<ExchangeRate> readExchangeRatesFrom(CurrencyPair currencyPair,
                 String contents) throws IOException {
-            BloombergJsonObject deserialized = JSON_FACTORY.createParser(contents).readValueAs(
+            BloombergJsonObject deserialized = JSON_FACTORY.createJsonParser(contents).readValueAs(
                     BloombergJsonObject.class);
             List<ExchangeRate> result = new ArrayList<>();
             for (Pair<Long, BigDecimal> entry : deserialized.dataValues) {
