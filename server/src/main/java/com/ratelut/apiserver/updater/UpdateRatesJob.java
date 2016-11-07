@@ -1,12 +1,12 @@
 package com.ratelut.apiserver.updater;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
 import com.ratelut.apiserver.common.*;
 import com.ratelut.apiserver.storage.Storage;
 import com.ratelut.apiserver.storage.StorageException;
 
 import javax.annotation.Nullable;
+import javax.inject.Inject;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
@@ -23,11 +23,7 @@ public class UpdateRatesJob implements Runnable {
     private static final Duration ONE_WEEK = Duration.ofDays(7);
     private static final Duration REVOLUT_RATE_TTL = Duration.ofMinutes(10);
 
-    private final Storage storage;
-
-    public UpdateRatesJob(Storage storage) {
-        this.storage = Preconditions.checkNotNull(storage);
-    }
+    @Inject Storage storage;
 
     @Override
     public void run() {

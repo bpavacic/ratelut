@@ -6,6 +6,8 @@ import com.ratelut.apiserver.common.ExchangeRate;
 import com.ratelut.apiserver.common.ExchangeRateProvider;
 import com.ratelut.apiserver.common.Interval;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.Optional;
  *
  * @author Boris Pavacic (boris.pavacic@gmail.com)
  */
+@Singleton
 public class SqlStorage implements Storage {
     private static final java.lang.String CREATE_TABLE_SQL = String.format(
             "CREATE TABLE IF NOT EXISTS rates (" +
@@ -26,8 +29,11 @@ public class SqlStorage implements Storage {
                     "PRIMARY KEY(timestamp, provider, currency_pair))");
     private final Connection connection;
 
-    public SqlStorage(Connection connection) throws SQLException {
-        this.connection = connection;
+    @Inject
+    public SqlStorage(SqlStorageConfig storageConfig) throws SQLException {
+        String jdbcUrl = storageConfig.getJdbcUrl();
+        System.out.println("Using JDBC URL " + jdbcUrl);
+        this.connection = DriverManager.getConnection(jdbcUrl);
         createTables();
     }
 

@@ -1,6 +1,6 @@
-package com.ratelut.apiserver.services;
+package com.ratelut.apiserver.resources;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.codehaus.jackson.annotate.JsonProperty;
 import com.ratelut.apiserver.spreads.LatestExchangeRates;
 
 import java.math.BigDecimal;

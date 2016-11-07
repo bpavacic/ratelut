@@ -1,4 +1,4 @@
-package com.ratelut.apiserver.services;
+package com.ratelut.apiserver.resources;
 
 import com.google.common.base.Preconditions;
 import com.ratelut.apiserver.common.CurrencyCode;
@@ -17,18 +17,17 @@ import javax.ws.rs.core.Response;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
 /**
- * Dummy REST service implementation.
+ * Generates snapshors of current exchange rate spreads.
  *
  * @author Boris Pavacic (boris.pavacic@gmail.com)
  */
-@Path("/")
-public class ApiService {
-    @Inject private SpreadsAggregator aggregator;
+@Path("/api/snapshot")
+public class Snapshot {
+    @Inject SpreadsAggregator aggregator;
 
     @GET
-    @Path("snapshot/{base}")
+    @Path("/{base}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response rateSnapshot(@PathParam("base") String baseCurrency) throws StorageException {
         Preconditions.checkNotNull(aggregator);

@@ -37,7 +37,8 @@ public class InMemoryStorage implements Storage {
                 ratesMap.get(exchangeRate.getTimestamp());
 
         if (!timeEntry.containsKey(exchangeRate.getProvider())) {
-            timeEntry.put(exchangeRate.getProvider(), new TreeSet<>(EXCHANGE_RATE_BY_CURRENCY_PAIR));
+            timeEntry.put(exchangeRate.getProvider(),
+                    new TreeSet<>(EXCHANGE_RATE_BY_CURRENCY_PAIR));
         }
         SortedSet<ExchangeRate> providerSet = timeEntry.get(exchangeRate.getProvider());
 
