@@ -29,8 +29,8 @@ task buildDocker(dependsOn: jar, type: Docker) {
     maintainer 'Boris Pavacic "boris.pavacic@gmail.com"'
 
     baseImage 'openjdk'
-    addFile(jar.archivePath, '/usr/src/myapp/app.jar')
-    workingDir("/usr/src/myapp")
+    addFile(jar.archivePath, '/tmp/ratelut/app.jar')
+    workingDir("/tmp/ratelut/")
     defaultCommand(["java", "-jar", "app.jar"])
     exposePort 8080
 
