@@ -1,5 +1,5 @@
 group 'ratelut'
-version '1.09-SNAPSHOT'
+version '1.10-SNAPSHOT'
 
 apply plugin: 'idea'
 apply plugin: 'java'
