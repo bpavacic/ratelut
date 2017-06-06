@@ -1,7 +1,5 @@
 package com.ratelut.apiserver.storage;
 
-import java.sql.SQLException;
-
 /**
  * Exception thrown by Storage implementations.
  *

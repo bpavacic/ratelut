@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Defines all supported currencies.
+ * Defines all currencies supported by Revolut.
  *
  * @author Boris Pavacic (boris.pavacic@gmail.com)
  */

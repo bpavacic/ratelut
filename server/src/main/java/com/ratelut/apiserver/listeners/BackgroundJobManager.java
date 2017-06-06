@@ -11,9 +11,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Initializes scheduler to execute periodic jobs.
- *
- * The listener is manually declared in web.xml.
+ * Initializes job scheduler to execute periodic jobs.
  *
  * @author Boris Pavacic (boris.pavacic@gmail.com)
  */

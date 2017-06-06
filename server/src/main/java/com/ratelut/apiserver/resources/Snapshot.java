@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Generates snapshors of current exchange rate spreads.
+ * Generates snapshots of current exchange rate spreads.
  *
  * @author Boris Pavacic (boris.pavacic@gmail.com)
  */

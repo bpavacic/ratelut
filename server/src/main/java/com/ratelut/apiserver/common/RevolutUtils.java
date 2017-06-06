@@ -17,9 +17,8 @@ public class RevolutUtils {
     /**
      * Returns a list of all currency pairs we should monitor.
      *
-     * The first currency is always one of the base currencies (EUR, GBP, USD), and the second is a
-     * spending currency
-     *
+     * The first currency is always one of the base currencies (EUR, GBP, USD), and the second is
+     * the spending currency.
      */
     public static List<CurrencyPair> getAllRevolutCurrencyPairs() {
         return ALL_REVOLUT_CURRENCY_PAIRS;

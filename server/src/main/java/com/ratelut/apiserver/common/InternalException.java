@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 
 /**
- * Exception thrown when internal error occurs.
+ * Exception thrown when an internal error occurs.
  *
  * @author Boris Pavacic (boris.pavacic@gmail.com)
  */

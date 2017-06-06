@@ -27,6 +27,7 @@ import java.util.Optional;
 public class BloombergRateFetcher {
     private static final String BLOOMBERG_URL_FORMAT =
             "http://www.bloomberg.com/markets/chart/data/1D/%s%s:CUR";
+
     public static Optional<ExchangeRate> fetchExchangeRate(CurrencyPair pair) {
         String url = String.format(BLOOMBERG_URL_FORMAT, pair.getFirst(), pair.getSecond());
 
@@ -41,7 +42,7 @@ public class BloombergRateFetcher {
             for (ExchangeRate exchangeRate : exchangeRates) {
                 if (!result.isPresent() ||
                         result.get().getTimestamp().isBefore(exchangeRate.getTimestamp())) {
-                    result = result.of(exchangeRate);
+                    result = Optional.of(exchangeRate);
                 }
             }
             return result;

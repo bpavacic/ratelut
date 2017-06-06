@@ -11,7 +11,7 @@ import java.time.Instant;
 import java.util.*;
 
 /**
- * Storage implementation keeping all data in memory in memory.
+ * Storage implementation keeping data in memory.
  *
  * Once the server is shut down, all data is lost. Implemented for testing purposes.
  *
