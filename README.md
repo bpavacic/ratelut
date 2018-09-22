@@ -9,4 +9,7 @@ To run:
 2) Let it run for a minute or two to fetch the data
 3) Check calculated [spreads](http://localhost:8080/api/snapshot/EUR)
 
+Pull requests are welcome
+
 Enjoy!
+
